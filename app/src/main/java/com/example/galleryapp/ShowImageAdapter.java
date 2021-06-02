@@ -2,6 +2,9 @@ package com.example.galleryapp;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +20,15 @@ import java.util.List;
 public class ShowImageAdapter extends RecyclerView.Adapter<ShowImageAdapter.Show_img_holder>{
     private Context mContext;
     private List<User> mListUser;
+    private List<String> imagePaths;
+
 
     public ShowImageAdapter(Context mContext, int simple_list_item_1, List<String> ds) {
         this.mContext = mContext;
+    }
+
+    public ShowImageAdapter(MainActivity mainActivity, List<String> imagePaths) {
+        this.imagePaths = imagePaths;
     }
 
     public void setData(List<User> list) {
@@ -37,19 +46,28 @@ public class ShowImageAdapter extends RecyclerView.Adapter<ShowImageAdapter.Show
 
     @Override
     public void onBindViewHolder(@NonNull Show_img_holder holder, int position) {
-        User user = mListUser.get(position);
+        String pathName  = imagePaths.get(position);
+
+        Bitmap bitmap = BitmapFactory.decodeFile(pathName);
+
+        holder.img.setImageBitmap(bitmap);
+
+        /*User user = mListUser.get(position);
         if (user == null) {
             return;
         }
         holder.img.setImageResource(user.getResouceImage());
-        holder.tvName.setText(user.getName());
+        holder.tvName.setText(user.getName());*/
+
+
+//        holder.img.setImageBitmap(BitmapFactory.decodeFile(String.valueOf(mListUser.get(position))));
 
     }
 
     @Override
     public int getItemCount() {
-        if(mListUser != null) {
-            return mListUser.size();
+        if(imagePaths != null) {
+            return imagePaths.size();
         }
         return 0;
     }
