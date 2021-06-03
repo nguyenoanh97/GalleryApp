@@ -4,6 +4,7 @@ package com.example.galleryapp;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,19 +19,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class ShowImageAdapter extends RecyclerView.Adapter<ShowImageAdapter.Show_img_holder>{
+public class ShowImageAdapter extends RecyclerView.Adapter<ShowImageAdapter.Show_img_holder> implements OnItemClickListener{
     private Context mContext;
     private List<User> mListUser;
     private List<String> imagePaths;
+    private OnItemClickListener listener;
 
 
-    public ShowImageAdapter(Context mContext, int simple_list_item_1, List<String> ds) {
-        this.mContext = mContext;
-    }
+//    public ShowImageAdapter(Context mContext, int simple_list_item_1, List<String> ds) {
+//        this.mContext = mContext;
+//    }
 
-    public ShowImageAdapter(Context c, List<String> imagePaths) {
+    public ShowImageAdapter(Context c, List<String> imagePaths, OnItemClickListener listener) {
         this.imagePaths = imagePaths;
         mContext = c;
+        this.listener = listener;
     }
 
     public void setData(List<User> list) {
@@ -61,6 +64,9 @@ public class ShowImageAdapter extends RecyclerView.Adapter<ShowImageAdapter.Show
         //130x130
         holder.img.setImageBitmap(bitmap);
 
+
+
+
         /*User user = mListUser.get(position);
         if (user == null) {
             return;
@@ -79,6 +85,11 @@ public class ShowImageAdapter extends RecyclerView.Adapter<ShowImageAdapter.Show
             return imagePaths.size();
         }
         return 0;
+    }
+
+    @Override
+    public void onItemClick(ContactsContract.CommonDataKinds.Note note) {
+
     }
 
     public class Show_img_holder extends RecyclerView.ViewHolder {

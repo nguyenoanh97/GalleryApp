@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     //Tạo List chuỗi chứa data
     List<String> imagePaths = new ArrayList<>();
+    GridLayoutManager gridLayoutManager;
+    View.OnClickListener clickListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,10 +78,45 @@ public class MainActivity extends AppCompatActivity {
         }
 
         ShowImageAdapter adapter = new ShowImageAdapter(this, imagePaths);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+        gridLayoutManager = new GridLayoutManager(MainActivity.this, 3);
+        binding.btnGridOne.setOnClickListener(clickListener);
+        binding.btnGridTwo.setOnClickListener(clickListener);
+        clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                switch (v.getId())
+                {
+                    case R.id.btn_grid_one:
+                        gridLayoutManager.setSpanCount(4);
+
+//                        binding.rcvUser.setLayoutManager(gridLayoutManager);
+//                        adapter.notifyDataSetChanged();
+//                        gridLayoutManager.requestLayout();
+//                        gridLayoutManager.setSpanCount(gridLayoutManager.setSpanCount());
+
+                        binding.rcvUser.setAdapter(adapter);
+                        break;
+
+
+                    case R.id.btn_grid_two:
+                        gridLayoutManager.setSpanCount(5);
+//                        binding.rcvUser.setLayoutManager(gridLayoutManager);
+//                        adapter.notifyDataSetChanged();
+                        gridLayoutManager.requestLayout();
+
+                        binding.rcvUser.setAdapter(adapter);
+                        break;
+                }
+                Log.d(TAG, "thay đổi grid" + v.getId());
+
+            }
+        };
         binding.rcvUser.setLayoutManager(gridLayoutManager);
 
         binding.rcvUser.setAdapter(adapter);
 
     }
+
+
 }
