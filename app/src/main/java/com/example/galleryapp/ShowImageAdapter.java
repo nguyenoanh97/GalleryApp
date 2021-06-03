@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +28,9 @@ public class ShowImageAdapter extends RecyclerView.Adapter<ShowImageAdapter.Show
         this.mContext = mContext;
     }
 
-    public ShowImageAdapter(MainActivity mainActivity, List<String> imagePaths) {
+    public ShowImageAdapter(Context c, List<String> imagePaths) {
         this.imagePaths = imagePaths;
+        mContext = c;
     }
 
     public void setData(List<User> list) {
@@ -46,10 +48,17 @@ public class ShowImageAdapter extends RecyclerView.Adapter<ShowImageAdapter.Show
 
     @Override
     public void onBindViewHolder(@NonNull Show_img_holder holder, int position) {
+
         String pathName  = imagePaths.get(position);
+        Log.d("TAG", "onBindViewHolder: position = "+position+" - pathName = "+pathName);
 
+        //4000x3000
         Bitmap bitmap = BitmapFactory.decodeFile(pathName);
+        Log.d("TAG", "onBindViewHolder: "+" - "+bitmap.getWidth()+" - "+bitmap.getHeight());
 
+
+
+        //130x130
         holder.img.setImageBitmap(bitmap);
 
         /*User user = mListUser.get(position);
