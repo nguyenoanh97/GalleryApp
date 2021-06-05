@@ -1,7 +1,7 @@
 package com.example.galleryapp;
 
-import android.provider.ContactsContract;
+import android.view.View;
 
 public interface OnItemClickListener {
-    void onItemClick(ContactsContract.CommonDataKinds.Note note);
+    void onItemClick(View view, int position, boolean isLongClick);
 }

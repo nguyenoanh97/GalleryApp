@@ -1,6 +1,7 @@
 package com.example.galleryapp;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -19,21 +21,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class ShowImageAdapter extends RecyclerView.Adapter<ShowImageAdapter.Show_img_holder> implements OnItemClickListener{
-    private Context mContext;
+public class ShowImageAdapter extends RecyclerView.Adapter<ShowImageAdapter.Show_img_holder>{
+    private MainActivity mContext;
     private List<User> mListUser;
     private List<String> imagePaths;
-    private OnItemClickListener listener;
+//    private  OnItemClickListener listener;
+
 
 
 //    public ShowImageAdapter(Context mContext, int simple_list_item_1, List<String> ds) {
 //        this.mContext = mContext;
 //    }
 
-    public ShowImageAdapter(Context c, List<String> imagePaths, OnItemClickListener listener) {
+    public ShowImageAdapter(MainActivity c, List<String> imagePaths) {
         this.imagePaths = imagePaths;
         mContext = c;
-        this.listener = listener;
+//        this.listener = listener;
+
     }
 
     public void setData(List<User> list) {
@@ -64,7 +68,7 @@ public class ShowImageAdapter extends RecyclerView.Adapter<ShowImageAdapter.Show
         //130x130
         holder.img.setImageBitmap(bitmap);
 
-
+        holder.setItemClickListener(mContext);
 
 
         /*User user = mListUser.get(position);
@@ -87,22 +91,37 @@ public class ShowImageAdapter extends RecyclerView.Adapter<ShowImageAdapter.Show
         return 0;
     }
 
-    @Override
-    public void onItemClick(ContactsContract.CommonDataKinds.Note note) {
 
-    }
+    public class Show_img_holder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-    public class Show_img_holder extends RecyclerView.ViewHolder {
-
+        private OnItemClickListener mListener;
         private ImageView img;
         private TextView tvName;
 
         public Show_img_holder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener((View.OnLongClickListener) this);
             img = itemView.findViewById(R.id.imv_them);
             tvName = itemView.findViewById(R.id.tv_name);
 
         }
+        public void setItemClickListener(OnItemClickListener itemClickListener)
+        {
+            this.mListener = itemClickListener;
+        }
+
+        @Override
+        public void onClick(View v) {
+            mListener.onItemClick(v,getAdapterPosition(),false);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            mListener.onItemClick(v,getAdapterPosition(),true);
+            return true;
+        }
     }
+
 
 }

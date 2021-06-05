@@ -1,15 +1,17 @@
 package com.example.galleryapp;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -22,7 +24,10 @@ import com.example.galleryapp.databinding.ActivityMainBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import static androidx.core.os.LocaleListCompat.create;
+import static com.example.galleryapp.R.id.imv_them;
+
+public class MainActivity extends AppCompatActivity implements OnItemClickListener{
     private static final String TAG = "MainActivity";
     ImageView image;
     ActivityMainBinding binding;
@@ -34,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        image = (ImageView) findViewById(R.id.imv_them) ;
+        image = (ImageView) findViewById(imv_them) ;
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
         setContentView(binding.getRoot());
@@ -78,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         ShowImageAdapter adapter = new ShowImageAdapter(this, imagePaths);
+        binding.rcvUser.setHasFixedSize(true);
         gridLayoutManager = new GridLayoutManager(MainActivity.this, 3);
         binding.btnGridOne.setOnClickListener(clickListener);
         binding.btnGridTwo.setOnClickListener(clickListener);
@@ -88,11 +94,14 @@ public class MainActivity extends AppCompatActivity {
                 switch (v.getId())
                 {
                     case R.id.btn_grid_one:
-                        gridLayoutManager.setSpanCount(4);
 
-//                        binding.rcvUser.setLayoutManager(gridLayoutManager);
-//                        adapter.notifyDataSetChanged();
-//                        gridLayoutManager.requestLayout();
+                        gridLayoutManager = new GridLayoutManager(MainActivity.this, 4);
+                        gridLayoutManager.setSpanCount(4);
+                        gridLayoutManager.requestLayout();
+
+
+                        binding.rcvUser.setLayoutManager(gridLayoutManager);
+                        adapter.notifyDataSetChanged();
 //                        gridLayoutManager.setSpanCount(gridLayoutManager.setSpanCount());
 
                         binding.rcvUser.setAdapter(adapter);
@@ -100,10 +109,13 @@ public class MainActivity extends AppCompatActivity {
 
 
                     case R.id.btn_grid_two:
+//                        gridLayoutManager = new GridLayoutManager(MainActivity.this, 5);
                         gridLayoutManager.setSpanCount(5);
-//                        binding.rcvUser.setLayoutManager(gridLayoutManager);
-//                        adapter.notifyDataSetChanged();
                         gridLayoutManager.requestLayout();
+
+                        binding.rcvUser.setLayoutManager(gridLayoutManager);
+                        adapter.notifyDataSetChanged();
+//                        notifychangeadapter();
 
                         binding.rcvUser.setAdapter(adapter);
                         break;
@@ -117,6 +129,31 @@ public class MainActivity extends AppCompatActivity {
         binding.rcvUser.setAdapter(adapter);
 
     }
+
+
+    @SuppressLint("ResourceType")
+    @Override
+    public void onItemClick(View view, int position, boolean isLongClick) {
+        Log.d(TAG, "onItemClick: "+imagePaths.get(position));
+
+
+        ImageView image;
+        image = new ImageView(this);
+
+image.setImageBitmap(BitmapFactory.decodeFile(imagePaths.get(position)));
+
+        AlertDialog.Builder aDialog = new AlertDialog.Builder(this)
+                .setView(image)
+                .setPositiveButton(android.R.string.ok,null)
+                .setNegativeButton(android.R.string.cancel, null);
+        create();
+        aDialog.show();
+
+
+
+    }
+
+
 
 
 }
